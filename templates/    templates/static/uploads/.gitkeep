@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ku">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ shop_name }}</title>
+</head>
+<body>
+
+<h1>{{ shop_name }}</h1>
+
+<p>بەخێربێیت {{ me['username'] }}</p>
+
+<a href="/logout">دەرچوون</a>
+
+<hr>
+
+<form method="get">
+<input name="q" value="{{ q }}" placeholder="گەڕان بە ناوی پارچە یان کۆد">
+<button type="submit">گەڕان</button>
+</form>
+
+{% if me['role'] == 'admin' %}
+
+<hr>
+<h3>زیادکردنی جۆری پارچە</h3>
+
+<form method="post" action="/category">
+<input name="brand" placeholder="Toyota / Nissan / MG" required>
+<input name="name" placeholder="ناوی جۆر" required>
+<button type="submit">زیادکردن</button>
+</form>
+
+<hr>
+<h3>زیادکردنی پارچە</h3>
+
+<form method="post" action="/product" enctype="multipart/form-data">
+<input name="brand" placeholder="Toyota / Nissan / MG" required>
+<input name="name" placeholder="ناوی پارچە" required>
+<input name="code" placeholder="کۆدی پارچە" required>
+
+<select name="category_id">
+<option value="">بێ جۆر</option>
+{% for cat in cats %}
+<option value="{{ cat['id'] }}">{{ cat['brand'] }} - {{ cat['name'] }}</option>
+{% endfor %}
+</select>
+
+<input name="buy" type="number" step="0.01" placeholder="نرخی کڕین">
+<input name="sell" type="number" step="0.01" placeholder="نرخی فرۆشتن">
+<input name="image" type="file">
+
+<button type="submit">زیادکردنی پارچە</button>
+</form>
+
+<hr>
+<a href="/employees">بەڕێوەبردنی کارمەندان</a>
+
+{% endif %}
+
+<hr>
+
+{% for p in products %}
+<div>
+<h3>{{ p['name'] }}</h3>
+<p>کۆد: {{ p['code'] }}</p>
+<p>براند: {{ p['brand'] }}</p>
+<p>جۆر: {{ p['cat'] or '—' }}</p>
+<p>نرخی فرۆشتن: {{ p['sell'] }}</p>
+
+{% if me['role'] == 'admin' %}
+<p>نرخی کڕین: {{ p['buy'] }}</p>
+
+<form method="post" action="/delete/{{ p['id'] }}">
+<button type="submit">سڕینەوە</button>
+</form>
+{% endif %}
+
+{% if p['image'] %}
+<img src="/static/uploads/{{ p['image'] }}" width="150">
+{% endif %}
+
+<hr>
+</div>
+{% endfor %}
+
+</body>
+</html>
