@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ku">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ shop_name }}</title>
+</head>
+<body>
+<h2>{{ shop_name }}</h2>
+
+<form method="post">
+<input name="username" placeholder="ناوی بەکارهێنەر" required>
+<input name="password" type="password" placeholder="وشەی نهێنی" required>
+<button type="submit">چوونەژوورەوە</button>
+</form>
+
+{% with messages = get_flashed_messages() %}
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endwith %}
+
+</body>
+</html>
